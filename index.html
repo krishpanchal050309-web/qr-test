@@ -984,12 +984,10 @@
       qrSection.style.display = 'block';
       attendanceList.style.display = 'none';
       
-      // Generate QR code if not already generated
-      if (!currentSession.qrGenerated) {
-        generateQRCode();
-        currentSession.qrGenerated = true;
-        saveSession();
-      }
+      // Generate QR code
+      generateQRCode();
+      currentSession.qrGenerated = true;
+      saveSession();
     });
 
     function generateQRCode() {
@@ -999,10 +997,11 @@
       // Simple QR data: just day and lecture code
       const qrData = `${currentLectureData.day}|${currentLectureData.code}`;
       
+      // Create QR code with larger size
       qrcode = new QRCode(qrcodeContainer, {
         text: qrData,
-        width: 300,
-        height: 300,
+        width: 280,
+        height: 280,
         colorDark: '#000000',
         colorLight: '#ffffff',
         correctLevel: QRCode.CorrectLevel.H
