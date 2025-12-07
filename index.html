@@ -23,6 +23,7 @@
       align-items: center;
     }
     
+    /* Dashboard */
     #dashboard {
       max-width: 800px;
       width: 100%;
@@ -90,20 +91,225 @@
       box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
     }
     
-    /* QR Generator Styles */
-    #qrGenerator {
+    /* Timetable Views */
+    #professorTimetable, #studentTimetable, #lectureView, #studentLectureView {
       display: none;
-      max-width: 800px;
+      max-width: 1000px;
       width: 100%;
     }
     
-    /* Student Scanner Styles */
-    #studentScanner {
-      display: none;
-      max-width: 800px;
-      width: 100%;
+    /* Timetable Grid */
+    .timetable-grid {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(20,30,50,0.1);
     }
     
+    .days-header {
+      display: grid;
+      grid-template-columns: 100px repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+      font-weight: bold;
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    
+    .day-header {
+      text-align: center;
+      color: #2c3e50;
+    }
+    
+    .lecture-slots {
+      display: grid;
+      grid-template-columns: 100px repeat(6, 1fr);
+      gap: 10px;
+    }
+    
+    .time-slot {
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      font-weight: 600;
+      color: #495057;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .lecture-cell {
+      padding: 15px;
+      background: white;
+      border: 2px solid #e6e9ef;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .lecture-cell:hover {
+      border-color: #0b5fff;
+      background: #f0f7ff;
+    }
+    
+    .lecture-name {
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+    
+    .lecture-code {
+      font-size: 0.9rem;
+      color: #6c757d;
+      margin-bottom: 8px;
+    }
+    
+    .lecture-btn {
+      padding: 6px 12px;
+      background: #0b5fff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: background 0.3s;
+    }
+    
+    .lecture-btn:hover {
+      background: #004ad9;
+    }
+    
+    .saturday-note {
+      margin-top: 20px;
+      color: #6c757d;
+      font-style: italic;
+    }
+    
+    /* Lecture View */
+    .lecture-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .lecture-title {
+      font-size: 1.8rem;
+      color: #2c3e50;
+    }
+    
+    .lecture-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      flex: 1;
+    }
+    
+    .attendance-list-btn {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .attendance-list-btn:hover {
+      background: #545b62;
+    }
+    
+    /* QR Section */
+    #qrSection {
+      display: none;
+      margin-top: 25px;
+      padding: 25px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border: 2px solid #e6e9ef;
+    }
+    
+    .session-id {
+      font-family: monospace;
+      background: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      word-break: break-all;
+      border: 1px solid #ddd;
+    }
+    
+    /* Attendance List */
+    #attendanceList {
+      display: none;
+      margin-top: 25px;
+      padding: 25px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border: 2px solid #e6e9ef;
+    }
+    
+    .attendance-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 15px;
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #e6e9ef;
+    }
+    
+    /* Scanner */
+    #scannerContainer {
+      margin-top: 20px;
+      position: relative;
+    }
+    
+    #canvas {
+      width: 100%;
+      max-width: 500px;
+      max-height: 400px;
+      border-radius: 10px;
+      border: 2px solid #ddd;
+      margin: 20px auto;
+      display: none;
+      object-fit: contain;
+      background: #000;
+    }
+    
+    .camera-placeholder {
+      width: 100%;
+      max-width: 500px;
+      height: 400px;
+      background: #f8f9fa;
+      border: 2px dashed #adb5bd;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #6c757d;
+      margin: 20px auto;
+    }
+    
+    .scanned-lecture {
+      margin-top: 25px;
+      padding: 25px;
+      background: #d4edda;
+      border-radius: 12px;
+      border: 2px solid #c3e6cb;
+      text-align: center;
+    }
+    
+    /* Common */
     .wrap {
       background: #fff;
       padding: 30px;
@@ -137,48 +343,6 @@
       color: #7f8c8d;
       margin-bottom: 25px;
       font-size: 1rem;
-    }
-    
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #495057;
-      text-align: left;
-    }
-    
-    textarea, input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-family: system-ui, Segoe UI, Roboto, Arial;
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-    
-    textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
-    
-    .row {
-      display: flex;
-      gap: 15px;
-      margin-top: 15px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    
-    .size-control {
-      flex: 1;
-      min-width: 200px;
-    }
-    
-    .controls {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
     }
     
     button {
@@ -217,82 +381,6 @@
       background: #218838;
     }
     
-    #qrcode {
-      margin-top: 30px;
-      padding: 20px;
-      border: 2px dashed #e6e9ef;
-      border-radius: 10px;
-      background: #f8f9fa;
-      min-height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .qrcode-placeholder {
-      color: #adb5bd;
-      font-style: italic;
-    }
-    
-    /* Scanner Styles */
-    #scannerContainer {
-      margin-top: 20px;
-      position: relative;
-    }
-    
-    #video {
-      display: none;
-    }
-    
-    #canvas {
-  width: 100%;
-  max-width: 500px;
-  max-height: 400px;
-  border-radius: 10px;
-  border: 2px solid #ddd;
-  margin: 20px auto;
-  display: block;
-  object-fit: contain;
-  background: #000;
-}
-    
-    #scanResult {
-      margin-top: 20px;
-      padding: 20px;
-      background: #f8f9fa;
-      border-radius: 10px;
-      border-left: 4px solid #28a745;
-      text-align: left;
-    }
-    
-    #resultText {
-      font-family: monospace;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-    
-    .camera-placeholder {
-  width: 100%;
-  max-width: 500px;
-  height: 400px;
-  background: #f8f9fa;
-  border: 2px dashed #adb5bd;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #6c757d;
-  margin: 20px auto;
-}
-    
-    .scanner-buttons {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      margin-top: 20px;
-    }
-    
     .status {
       padding: 10px 15px;
       border-radius: 6px;
@@ -312,20 +400,14 @@
       border: 1px solid #f5c6cb;
     }
     
-    .attendance-counter {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 20px;
-      text-align: center;
-      border: 2px solid #e6e9ef;
-    }
-    
-    .counter-number {
-      font-size: 2.5rem;
-      font-weight: bold;
-      color: #0b5fff;
-      margin: 10px 0;
+    @media (max-width: 900px) {
+      .days-header, .lecture-slots {
+        grid-template-columns: 80px repeat(3, 1fr);
+      }
+      
+      .lecture-cell:nth-child(n+5) {
+        display: none;
+      }
     }
     
     @media (max-width: 600px) {
@@ -339,16 +421,17 @@
         max-width: 300px;
       }
       
-      .controls, .scanner-buttons {
-        justify-content: center;
-      }
-      
-      .row {
+      .lecture-actions {
         flex-direction: column;
       }
       
-      .size-control {
-        width: 100%;
+      .days-header, .lecture-slots {
+        grid-template-columns: 60px repeat(2, 1fr);
+        font-size: 0.9rem;
+      }
+      
+      .lecture-cell:nth-child(n+4) {
+        display: none;
       }
       
       h1 {
@@ -361,7 +444,7 @@
   <!-- Dashboard -->
   <div id="dashboard">
     <div class="welcome-card">
-      <h1>Welcome to Attendance App</h1>
+      <h1>Attendance App</h1>
       <p class="welcome-text">Select your role to continue. Professors can generate QR codes for attendance, students can scan them.</p>
       <div class="button-container">
         <button id="professorBtn" class="role-btn">
@@ -374,60 +457,129 @@
     </div>
   </div>
   
-  <!-- QR Code Generator -->
-  <div id="qrGenerator">
+  <!-- Professor Timetable -->
+  <div id="professorTimetable">
     <div class="wrap">
-      <button id="backBtn" class="back-btn">
+      <button id="backBtnProfessor" class="back-btn">
         <i class="fas fa-arrow-left"></i> Back to Dashboard
       </button>
       
-      <h2 class="panel-title">QR Code Generator</h2>
-      <p class="note">Generate a cryptographic QR code for attendance. Each code is unique and increases counter when scanned.</p>
-
-      <div class="row">
-        <div class="size-control">
-          <label for="size">QR Code Size (px)</label>
-          <input id="size" type="number" min="64" max="2048" value="256" />
-        </div>
-
-        <div class="controls">
-          <button id="gen" class="primary-btn">
-            <i class="fas fa-qrcode"></i> Generate New QR
-          </button>
-          <button id="download" class="secondary-btn">
-            <i class="fas fa-download"></i> Download PNG
-          </button>
-        </div>
-      </div>
-
-      <div id="qrcode" aria-live="polite">
-        <div class="qrcode-placeholder">Click "Generate New QR" to create attendance code</div>
-      </div>
+      <h2 class="panel-title">Professor Timetable</h2>
+      <p class="note">Click M.A. (Mark Attendance) on any lecture to start attendance session</p>
       
-      <div class="attendance-counter">
-        <h3><i class="fas fa-users"></i> Attendance Counter</h3>
-        <div class="counter-number" id="counter">0</div>
-        <p>Students scanned: <span id="scannedCount">0</span></p>
-        <button id="resetCounter" class="secondary-btn" style="margin-top: 10px;">
-          <i class="fas fa-redo"></i> Reset Counter
-        </button>
+      <div class="timetable-grid">
+        <div class="days-header">
+          <div class="day-header">Time</div>
+          <div class="day-header">Monday</div>
+          <div class="day-header">Tuesday</div>
+          <div class="day-header">Wednesday</div>
+          <div class="day-header">Thursday</div>
+          <div class="day-header">Friday</div>
+          <div class="day-header">Saturday</div>
+        </div>
+        
+        <div class="lecture-slots" id="professorLectures">
+          <!-- Lecture slots will be generated here -->
+        </div>
+        
+        <p class="saturday-note">Note: Saturday has 3 lectures (Lecture 5-7 not available)</p>
       </div>
     </div>
   </div>
   
-  <!-- Student QR Scanner -->
-  <div id="studentScanner">
+  <!-- Student Timetable -->
+  <div id="studentTimetable">
     <div class="wrap">
-      <button id="backBtnStudent" class="back-btn">
+      <button id="backBtnStudentTimetable" class="back-btn">
         <i class="fas fa-arrow-left"></i> Back to Dashboard
       </button>
       
-      <h2 class="panel-title">QR Code Scanner</h2>
-      <p class="note">Click "Start Camera" to scan attendance QR codes.</p>
+      <h2 class="panel-title">Student Timetable</h2>
+      <p class="note">Click S.A. (Scan Attendance) on any lecture to scan attendance QR</p>
+      
+      <div class="timetable-grid">
+        <div class="days-header">
+          <div class="day-header">Time</div>
+          <div class="day-header">Monday</div>
+          <div class="day-header">Tuesday</div>
+          <div class="day-header">Wednesday</div>
+          <div class="day-header">Thursday</div>
+          <div class="day-header">Friday</div>
+          <div class="day-header">Saturday</div>
+        </div>
+        
+        <div class="lecture-slots" id="studentLectures">
+          <!-- Lecture slots will be generated here -->
+        </div>
+        
+        <p class="saturday-note">Note: Saturday has 3 lectures (Lecture 5-7 not available)</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Professor Lecture View -->
+  <div id="lectureView">
+    <div class="wrap">
+      <button id="backBtnLecture" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Timetable
+      </button>
+      
+      <div class="lecture-header">
+        <h2 class="lecture-title" id="currentLecture">Lecture Name</h2>
+        <span class="status success" id="lectureStatus">Active</span>
+      </div>
+      
+      <div class="lecture-actions">
+        <div class="action-buttons">
+          <button id="showQRBtn" class="primary-btn">
+            <i class="fas fa-qrcode"></i> Show QR for Attendance
+          </button>
+          <button id="viewListBtn" class="attendance-list-btn">
+            <i class="fas fa-list"></i> View Attendance List
+          </button>
+        </div>
+      </div>
+      
+      <!-- QR Section -->
+      <div id="qrSection">
+        <h3><i class="fas fa-qrcode"></i> Attendance QR Code</h3>
+        <p>Students should scan this QR code to mark attendance for <strong id="lectureNameQR"></strong></p>
+        
+        <div class="session-id">
+          Session ID: <span id="sessionIdDisplay">Loading...</span>
+        </div>
+        
+        <div id="qrcode" style="margin: 20px 0;"></div>
+        
+        <div class="status success" id="attendanceCounter">
+          <i class="fas fa-users"></i> Attendance Marked: <span id="counter">0</span> students
+        </div>
+      </div>
+      
+      <!-- Attendance List -->
+      <div id="attendanceList">
+        <h3><i class="fas fa-users"></i> Attendance List</h3>
+        <p>Students who have marked attendance for this session:</p>
+        <div id="attendanceItems">
+          <!-- Attendance items will appear here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Student Lecture View -->
+  <div id="studentLectureView">
+    <div class="wrap">
+      <button id="backBtnStudentLecture" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Timetable
+      </button>
+      
+      <h2 class="panel-title">Scan Attendance</h2>
+      <p class="note" id="lectureInfo">Lecture: <span id="scannedLectureName">Loading...</span></p>
       
       <div class="scanner-buttons">
         <button id="startCamera" class="success-btn">
-          <i class="fas fa-camera"></i> Start Camera
+          <i class="fas fa-camera"></i> Start Camera to Scan
         </button>
         <button id="stopCamera" class="secondary-btn" style="display: none;">
           <i class="fas fa-stop"></i> Stop Camera
@@ -437,18 +589,18 @@
       <div id="scannerContainer">
         <div class="camera-placeholder" id="cameraPlaceholder">
           <i class="fas fa-camera" style="font-size: 48px; margin-bottom: 15px;"></i>
-          <p>Click "Start Camera" to begin</p>
+          <p>Click "Start Camera" to begin scanning</p>
         </div>
         <canvas id="canvas"></canvas>
       </div>
       
       <div id="scanStatus" class="status" style="display: none;"></div>
       
-      <div id="scanResult" style="display: none;">
-        <h3><i class="fas fa-check-circle"></i> QR Code Scanned Successfully!</h3>
-        <p>Attendance Marked</p>
-        <pre id="resultText"></pre>
-        <button id="scanAgain" class="success-btn" style="margin-top: 15px;">
+      <div id="scannedLecture" class="scanned-lecture" style="display: none;">
+        <h3><i class="fas fa-check-circle"></i> Attendance Marked Successfully!</h3>
+        <h4 id="markedLectureName">Lecture Name</h4>
+        <p>Time: <span id="scanTime"></span></p>
+        <button id="scanAnother" class="success-btn" style="margin-top: 15px;">
           <i class="fas fa-redo"></i> Scan Another QR
         </button>
       </div>
@@ -460,132 +612,359 @@
   <script>
     // DOM Elements
     const dashboard = document.getElementById('dashboard');
-    const qrGenerator = document.getElementById('qrGenerator');
-    const studentScanner = document.getElementById('studentScanner');
+    const professorTimetable = document.getElementById('professorTimetable');
+    const studentTimetable = document.getElementById('studentTimetable');
+    const lectureView = document.getElementById('lectureView');
+    const studentLectureView = document.getElementById('studentLectureView');
     
     const professorBtn = document.getElementById('professorBtn');
     const studentBtn = document.getElementById('studentBtn');
-    const backBtn = document.getElementById('backBtn');
-    const backBtnStudent = document.getElementById('backBtnStudent');
     
-    // QR Code Elements
-    const textEl = document.getElementById('text');
-    const sizeEl = document.getElementById('size');
-    const genBtn = document.getElementById('gen');
-    const downloadBtn = document.getElementById('download');
-    const qrcodeContainer = document.getElementById('qrcode');
-    const counterEl = document.getElementById('counter');
-    const scannedCountEl = document.getElementById('scannedCount');
-    const resetCounterBtn = document.getElementById('resetCounter');
+    // Back buttons
+    const backBtnProfessor = document.getElementById('backBtnProfessor');
+    const backBtnStudentTimetable = document.getElementById('backBtnStudentTimetable');
+    const backBtnLecture = document.getElementById('backBtnLecture');
+    const backBtnStudentLecture = document.getElementById('backBtnStudentLecture');
     
-    // Scanner Elements
+    // Professor lecture elements
+    const showQRBtn = document.getElementById('showQRBtn');
+    const viewListBtn = document.getElementById('viewListBtn');
+    const qrSection = document.getElementById('qrSection');
+    const attendanceList = document.getElementById('attendanceList');
+    const sessionIdDisplay = document.getElementById('sessionIdDisplay');
+    const lectureNameQR = document.getElementById('lectureNameQR');
+    const counter = document.getElementById('counter');
+    const attendanceItems = document.getElementById('attendanceItems');
+    const currentLecture = document.getElementById('currentLecture');
+    
+    // Scanner elements
     const startCameraBtn = document.getElementById('startCamera');
     const stopCameraBtn = document.getElementById('stopCamera');
     const canvas = document.getElementById('canvas');
     const cameraPlaceholder = document.getElementById('cameraPlaceholder');
-    const scanResult = document.getElementById('scanResult');
-    const resultText = document.getElementById('resultText');
     const scanStatus = document.getElementById('scanStatus');
-    const scanAgainBtn = document.getElementById('scanAgain');
+    const scannedLecture = document.getElementById('scannedLecture');
+    const markedLectureName = document.getElementById('markedLectureName');
+    const scanTime = document.getElementById('scanTime');
+    const scanAnother = document.getElementById('scanAnother');
+    const scannedLectureName = document.getElementById('scannedLectureName');
+    const lectureInfo = document.getElementById('lectureInfo');
     
     // Global variables
     let qrcode = null;
     let stream = null;
     let scanning = false;
-    let currentSessionId = null;
-    let attendanceCounter = 0;
-    let scannedCodes = new Set(); // Track scanned codes to prevent duplicates
+    let currentSession = null;
+    let currentLectureData = null;
+    let currentStudentLecture = null;
+    
+    // Lecture data
+    const lectures = [
+      { time: "9:00-10:00", code: "CS101", name: "Data Structures" },
+      { time: "10:00-11:00", code: "MA201", name: "Calculus II" },
+      { time: "11:00-12:00", code: "PH301", name: "Physics Lab" },
+      { time: "12:00-1:00", code: "EN401", name: "Communication Skills" },
+      { time: "2:00-3:00", code: "CS501", name: "Algorithms" },
+      { time: "3:00-4:00", code: "EE601", name: "Digital Electronics" },
+      { time: "4:00-5:00", code: "CS701", name: "Machine Learning" }
+    ];
+    
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     
     // Dashboard Navigation
     professorBtn.addEventListener('click', () => {
       dashboard.style.display = 'none';
-      studentScanner.style.display = 'none';
-      qrGenerator.style.display = 'block';
+      professorTimetable.style.display = 'block';
+      generateProfessorTimetable();
     });
 
     studentBtn.addEventListener('click', () => {
       dashboard.style.display = 'none';
-      qrGenerator.style.display = 'none';
-      studentScanner.style.display = 'block';
+      studentTimetable.style.display = 'block';
+      generateStudentTimetable();
     });
 
-    backBtn.addEventListener('click', () => {
-      qrGenerator.style.display = 'none';
+    // Back button handlers
+    backBtnProfessor.addEventListener('click', () => {
+      professorTimetable.style.display = 'none';
       dashboard.style.display = 'block';
     });
 
-    backBtnStudent.addEventListener('click', () => {
+    backBtnStudentTimetable.addEventListener('click', () => {
+      studentTimetable.style.display = 'none';
+      dashboard.style.display = 'block';
+    });
+
+    backBtnLecture.addEventListener('click', () => {
+      lectureView.style.display = 'none';
+      professorTimetable.style.display = 'block';
+    });
+
+    backBtnStudentLecture.addEventListener('click', () => {
       stopCamera();
-      studentScanner.style.display = 'none';
-      dashboard.style.display = 'block';
+      studentLectureView.style.display = 'none';
+      studentTimetable.style.display = 'block';
     });
 
-    // Generate cryptographically random QR code
-    function generateRandomCode() {
-      // Create a unique session ID with timestamp and random bytes
+    // Generate Professor Timetable
+    function generateProfessorTimetable() {
+      const container = document.getElementById('professorLectures');
+      container.innerHTML = '';
+      
+      lectures.forEach((lecture, index) => {
+        // Time slot
+        const timeSlot = document.createElement('div');
+        timeSlot.className = 'time-slot';
+        timeSlot.textContent = lecture.time;
+        container.appendChild(timeSlot);
+        
+        // Lecture cells for each day
+        days.forEach(day => {
+          const cell = document.createElement('div');
+          cell.className = 'lecture-cell';
+          
+          // Saturday has only 3 lectures
+          if (day === 'Saturday' && index >= 3) {
+            cell.innerHTML = `<div class="lecture-name">No Lecture</div>`;
+            cell.style.background = '#f8f9fa';
+            cell.style.cursor = 'default';
+            cell.style.opacity = '0.7';
+          } else {
+            cell.innerHTML = `
+              <div class="lecture-name">${lecture.name}</div>
+              <div class="lecture-code">${lecture.code}</div>
+              <button class="lecture-btn" data-day="${day}" data-index="${index}">M.A.</button>
+            `;
+            
+            // Add click event
+            const button = cell.querySelector('.lecture-btn');
+            button.addEventListener('click', (e) => {
+              e.stopPropagation();
+              openProfessorLecture(day, index);
+            });
+          }
+          
+          container.appendChild(cell);
+        });
+      });
+    }
+
+    // Generate Student Timetable
+    function generateStudentTimetable() {
+      const container = document.getElementById('studentLectures');
+      container.innerHTML = '';
+      
+      lectures.forEach((lecture, index) => {
+        // Time slot
+        const timeSlot = document.createElement('div');
+        timeSlot.className = 'time-slot';
+        timeSlot.textContent = lecture.time;
+        container.appendChild(timeSlot);
+        
+        // Lecture cells for each day
+        days.forEach(day => {
+          const cell = document.createElement('div');
+          cell.className = 'lecture-cell';
+          
+          // Saturday has only 3 lectures
+          if (day === 'Saturday' && index >= 3) {
+            cell.innerHTML = `<div class="lecture-name">No Lecture</div>`;
+            cell.style.background = '#f8f9fa';
+            cell.style.cursor = 'default';
+            cell.style.opacity = '0.7';
+          } else {
+            cell.innerHTML = `
+              <div class="lecture-name">${lecture.name}</div>
+              <div class="lecture-code">${lecture.code}</div>
+              <button class="lecture-btn" data-day="${day}" data-index="${index}">S.A.</button>
+            `;
+            
+            // Add click event
+            const button = cell.querySelector('.lecture-btn');
+            button.addEventListener('click', (e) => {
+              e.stopPropagation();
+              openStudentLecture(day, index);
+            });
+          }
+          
+          container.appendChild(cell);
+        });
+      });
+    }
+
+    // Open Professor Lecture View
+    function openProfessorLecture(day, lectureIndex) {
+      const lecture = lectures[lectureIndex];
+      currentLectureData = {
+        day: day,
+        index: lectureIndex,
+        code: lecture.code,
+        name: lecture.name,
+        time: lecture.time
+      };
+      
+      currentLecture.textContent = `${lecture.name} (${day})`;
+      lectureNameQR.textContent = `${lecture.name} (${day}, ${lecture.time})`;
+      
+      professorTimetable.style.display = 'none';
+      lectureView.style.display = 'block';
+      
+      // Reset views
+      qrSection.style.display = 'none';
+      attendanceList.style.display = 'none';
+      
+      // Load existing session or create new
+      loadOrCreateSession();
+    }
+
+    // Open Student Lecture View
+    function openStudentLecture(day, lectureIndex) {
+      const lecture = lectures[lectureIndex];
+      currentStudentLecture = {
+        day: day,
+        index: lectureIndex,
+        code: lecture.code,
+        name: lecture.name,
+        time: lecture.time
+      };
+      
+      scannedLectureName.textContent = `${lecture.name} (${day})`;
+      lectureInfo.textContent = `Lecture: ${lecture.name} (${day}, ${lecture.time})`;
+      
+      studentTimetable.style.display = 'none';
+      studentLectureView.style.display = 'block';
+      
+      // Reset scanner
+      scannedLecture.style.display = 'none';
+      cameraPlaceholder.style.display = 'flex';
+      canvas.style.display = 'none';
+      scanStatus.style.display = 'none';
+    }
+
+    // Session Management
+    function loadOrCreateSession() {
+      const sessionKey = `session_${currentLectureData.day}_${currentLectureData.code}`;
+      const savedSession = localStorage.getItem(sessionKey);
+      
+      if (savedSession) {
+        currentSession = JSON.parse(savedSession);
+        sessionIdDisplay.textContent = currentSession.id;
+        updateAttendanceCounter();
+        updateAttendanceList();
+      } else {
+        createNewSession();
+      }
+    }
+
+    function createNewSession() {
       const timestamp = Date.now();
       const randomBytes = crypto.getRandomValues(new Uint8Array(8));
       const randomHex = Array.from(randomBytes).map(b => b.toString(16).padStart(2, '0')).join('');
       
-      currentSessionId = `ATTENDANCE_${timestamp}_${randomHex}`;
-      return currentSessionId;
+      currentSession = {
+        id: `ATTENDANCE_${timestamp}_${randomHex}`,
+        lecture: currentLectureData,
+        attendees: [],
+        createdAt: timestamp,
+        qrGenerated: false
+      };
+      
+      sessionIdDisplay.textContent = currentSession.id;
+      
+      // Save to localStorage
+      const sessionKey = `session_${currentLectureData.day}_${currentLectureData.code}`;
+      localStorage.setItem(sessionKey, JSON.stringify(currentSession));
+      
+      // Also save to global sessions list
+      saveToSessionsList();
+    }
+
+    function saveToSessionsList() {
+      let sessions = JSON.parse(localStorage.getItem('all_sessions') || '[]');
+      
+      // Check if session already exists
+      const exists = sessions.some(s => s.id === currentSession.id);
+      if (!exists) {
+        sessions.push({
+          id: currentSession.id,
+          lecture: currentSession.lecture,
+          createdAt: currentSession.createdAt,
+          attendeeCount: currentSession.attendees.length
+        });
+        localStorage.setItem('all_sessions', JSON.stringify(sessions));
+      }
     }
 
     // QR Code Functions
-    function generate() {
-      const size = Math.max(64, Math.min(2048, parseInt(sizeEl.value) || 256));
+    showQRBtn.addEventListener('click', () => {
+      qrSection.style.display = 'block';
+      attendanceList.style.display = 'none';
+      
+      // Generate QR code if not already generated
+      if (!currentSession.qrGenerated) {
+        generateQRCode();
+        currentSession.qrGenerated = true;
+        saveSession();
+      }
+    });
+
+    function generateQRCode() {
+      const qrcodeContainer = document.getElementById('qrcode');
       qrcodeContainer.innerHTML = '';
       
-      const randomCode = generateRandomCode();
-      
       qrcode = new QRCode(qrcodeContainer, {
-        text: randomCode,
-        width: size,
-        height: size,
+        text: JSON.stringify({
+          sessionId: currentSession.id,
+          lecture: currentLectureData,
+          timestamp: Date.now()
+        }),
+        width: 256,
+        height: 256,
         colorDark: '#000000',
         colorLight: '#ffffff',
         correctLevel: QRCode.CorrectLevel.H
       });
-      
-      // Store in localStorage for persistence
-      localStorage.setItem('currentQRCode', randomCode);
-      localStorage.setItem('attendanceCounter', attendanceCounter.toString());
     }
 
-    function download() {
-      if (!qrcodeContainer) return;
+    // Attendance List Functions
+    viewListBtn.addEventListener('click', () => {
+      qrSection.style.display = 'none';
+      attendanceList.style.display = 'block';
+      updateAttendanceList();
+    });
+
+    function updateAttendanceList() {
+      attendanceItems.innerHTML = '';
       
-      const img = qrcodeContainer.querySelector('img');
-      if (img && img.src) {
-        triggerDownload(img.src, 'attendance_qr.png');
+      if (currentSession.attendees.length === 0) {
+        attendanceItems.innerHTML = '<p style="text-align: center; color: #6c757d;">No attendance marked yet.</p>';
         return;
       }
       
-      const canvas = qrcodeContainer.querySelector('canvas');
-      if (canvas) {
-        const data = canvas.toDataURL('image/png');
-        triggerDownload(data, 'attendance_qr.png');
-        return;
-      }
-      
-      alert('Please generate a QR code first');
+      currentSession.attendees.forEach((attendee, index) => {
+        const item = document.createElement('div');
+        item.className = 'attendance-item';
+        item.innerHTML = `
+          <div>
+            <strong>Student ${index + 1}</strong>
+            <div style="font-size: 0.9rem; color: #6c757d;">ID: ${attendee.studentId || 'Anonymous'}</div>
+          </div>
+          <div>
+            ${new Date(attendee.timestamp).toLocaleTimeString()}
+          </div>
+        `;
+        attendanceItems.appendChild(item);
+      });
     }
 
-    function triggerDownload(dataUrl, filename) {
-      const a = document.createElement('a');
-      a.href = dataUrl;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+    function updateAttendanceCounter() {
+      counter.textContent = currentSession.attendees.length;
     }
 
-    function updateCounter() {
-      counterEl.textContent = attendanceCounter;
-      scannedCountEl.textContent = scannedCodes.size;
-      
-      // Store in localStorage
-      localStorage.setItem('attendanceCounter', attendanceCounter.toString());
+    function saveSession() {
+      const sessionKey = `session_${currentLectureData.day}_${currentLectureData.code}`;
+      localStorage.setItem(sessionKey, JSON.stringify(currentSession));
+      saveToSessionsList();
     }
 
     // Scanner Functions
@@ -605,15 +984,15 @@
         video.play();
         
         cameraPlaceholder.style.display = 'none';
+        canvas.style.display = 'block';
         startCameraBtn.style.display = 'none';
         stopCameraBtn.style.display = 'inline-block';
         scanning = true;
         
         scanStatus.style.display = 'block';
         scanStatus.className = 'status success';
-        scanStatus.textContent = 'Camera started. Point at QR code to scan.';
+        scanStatus.textContent = 'Camera started. Point at attendance QR code.';
         
-        // Start scanning
         requestAnimationFrame(() => scanFrame(video));
         
       } catch (err) {
@@ -625,26 +1004,18 @@
     }
 
     function stopCamera() {
-  if (stream) {
-    stream.getTracks().forEach(track => track.stop());
-    stream = null;
-  }
-  
-  cameraPlaceholder.style.display = 'flex';
-  startCameraBtn.style.display = 'inline-block';
-  stopCameraBtn.style.display = 'none';
-  scanning = false;
-  scanStatus.style.display = 'none';
-  scanResult.style.display = 'none';
-  
-  // Clear the canvas
-  const context = canvas.getContext('2d');
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  
-  // Reset canvas dimensions
-  canvas.width = 0;
-  canvas.height = 0;
-}
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+      }
+      
+      cameraPlaceholder.style.display = 'flex';
+      canvas.style.display = 'none';
+      startCameraBtn.style.display = 'inline-block';
+      stopCameraBtn.style.display = 'none';
+      scanning = false;
+      scanStatus.style.display = 'none';
+    }
 
     function scanFrame(video) {
       if (!scanning) return;
@@ -659,47 +1030,70 @@
         const code = jsQR(imageData.data, imageData.width, imageData.height);
         
         if (code) {
-          const scannedData = code.data;
-          
-          // Check if this is an attendance QR code
-          if (scannedData.startsWith('ATTENDANCE_')) {
-            // Check if already scanned
-            if (!scannedCodes.has(scannedData)) {
-              scannedCodes.add(scannedData);
-              attendanceCounter++;
-              updateCounter();
+          try {
+            const scannedData = JSON.parse(code.data);
+            
+            if (scannedData.sessionId && scannedData.lecture) {
+              // Find the session
+              const sessionKey = `session_${scannedData.lecture.day}_${scannedData.lecture.code}`;
+              const savedSession = localStorage.getItem(sessionKey);
               
-              // Show success
-              resultText.textContent = `Code: ${scannedData}\nTime: ${new Date().toLocaleTimeString()}`;
-              scanResult.style.display = 'block';
-              
-              scanStatus.className = 'status success';
-              scanStatus.textContent = `Attendance recorded! Total: ${attendanceCounter}`;
-              
-              // Draw green box
-              context.strokeStyle = '#28a745';
-              context.lineWidth = 4;
-              context.strokeRect(
-                code.location.topLeftCorner.x,
-                code.location.topLeftCorner.y,
-                code.location.bottomRightCorner.x - code.location.topLeftCorner.x,
-                code.location.bottomRightCorner.y - code.location.topLeftCorner.y
-              );
-              
-              // Store scanned codes
-              localStorage.setItem('scannedCodes', JSON.stringify(Array.from(scannedCodes)));
-              
-              // Stop scanning for 3 seconds
-              setTimeout(() => {
-                scanResult.style.display = 'none';
-              }, 3000);
-            } else {
-              scanStatus.className = 'status';
-              scanStatus.textContent = 'Code already scanned';
+              if (savedSession) {
+                const session = JSON.parse(savedSession);
+                
+                // Check if already scanned (by this student)
+                const studentId = localStorage.getItem('studentId') || `student_${Date.now()}`;
+                const alreadyScanned = session.attendees.some(a => a.studentId === studentId);
+                
+                if (!alreadyScanned) {
+                  // Add to attendees
+                  session.attendees.push({
+                    studentId: studentId,
+                    timestamp: Date.now(),
+                    lecture: scannedData.lecture
+                  });
+                  
+                  // Save updated session
+                  localStorage.setItem(sessionKey, JSON.stringify(session));
+                  
+                  // Show success
+                  markedLectureName.textContent = `${scannedData.lecture.name} (${scannedData.lecture.day})`;
+                  scanTime.textContent = new Date().toLocaleTimeString();
+                  
+                  // Auto-stop camera and show result
+                  stopCamera();
+                  scannedLecture.style.display = 'block';
+                  
+                  // Notify professor view if open
+                  if (currentLectureData && 
+                      currentLectureData.day === scannedData.lecture.day &&
+                      currentLectureData.code === scannedData.lecture.code) {
+                    currentSession = session;
+                    updateAttendanceCounter();
+                    updateAttendanceList();
+                  }
+                  
+                  // Draw green box
+                  context.strokeStyle = '#28a745';
+                  context.lineWidth = 4;
+                  context.strokeRect(
+                    code.location.topLeftCorner.x,
+                    code.location.topLeftCorner.y,
+                    code.location.bottomRightCorner.x - code.location.topLeftCorner.x,
+                    code.location.bottomRightCorner.y - code.location.topLeftCorner.y
+                  );
+                } else {
+                  scanStatus.className = 'status';
+                  scanStatus.textContent = 'Attendance already marked for this lecture.';
+                }
+              } else {
+                scanStatus.className = 'status error';
+                scanStatus.textContent = 'Invalid attendance session.';
+              }
             }
-          } else {
-            scanStatus.className = 'status';
-            scanStatus.textContent = 'Not a valid attendance code';
+          } catch (e) {
+            scanStatus.className = 'status error';
+            scanStatus.textContent = 'Not a valid attendance QR code.';
           }
         }
       }
@@ -713,46 +1107,20 @@
     startCameraBtn.addEventListener('click', startCamera);
     stopCameraBtn.addEventListener('click', stopCamera);
     
-    scanAgainBtn.addEventListener('click', () => {
-      scanResult.style.display = 'none';
+    scanAnother.addEventListener('click', () => {
+      scannedLecture.style.display = 'none';
+      startCamera();
     });
 
-    // QR Code Event Listeners
-    genBtn.addEventListener('click', generate);
-    downloadBtn.addEventListener('click', download);
-    
-    resetCounterBtn.addEventListener('click', () => {
-      if (confirm('Reset attendance counter?')) {
-        attendanceCounter = 0;
-        scannedCodes.clear();
-        updateCounter();
-        localStorage.removeItem('scannedCodes');
-      }
-    });
-
-    // Load saved data
-    function loadSavedData() {
-      const savedCounter = localStorage.getItem('attendanceCounter');
-      if (savedCounter) {
-        attendanceCounter = parseInt(savedCounter);
-      }
-      
-      const savedScanned = localStorage.getItem('scannedCodes');
-      if (savedScanned) {
-        scannedCodes = new Set(JSON.parse(savedScanned));
-      }
-      
-      const savedQR = localStorage.getItem('currentQRCode');
-      if (savedQR) {
-        currentSessionId = savedQR;
-      }
-      
-      updateCounter();
+    // Initialize student ID
+    if (!localStorage.getItem('studentId')) {
+      const randomId = 'STU' + Math.floor(1000 + Math.random() * 9000);
+      localStorage.setItem('studentId', randomId);
     }
 
     // Initialize
-    loadSavedData();
-    generate(); // Generate initial QR code
+    generateProfessorTimetable();
+    generateStudentTimetable();
   </script>
 </body>
 </html>
