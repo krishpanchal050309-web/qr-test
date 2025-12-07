@@ -101,9 +101,15 @@
     /* Timetable Grid */
     .timetable-grid {
       background: #fff;
-      padding: 30px;
+      padding: 20px;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(20,30,50,0.1);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .timetable-container {
+      min-width: 800px;
     }
     
     .days-header {
@@ -115,17 +121,20 @@
       background: #f8f9fa;
       padding: 15px;
       border-radius: 10px;
+      min-width: 800px;
     }
     
     .day-header {
       text-align: center;
       color: #2c3e50;
+      min-width: 100px;
     }
     
     .lecture-slots {
       display: grid;
       grid-template-columns: 100px repeat(6, 1fr);
       gap: 10px;
+      min-width: 800px;
     }
     
     .time-slot {
@@ -137,6 +146,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      min-height: 80px;
+      min-width: 100px;
     }
     
     .lecture-cell {
@@ -147,10 +158,12 @@
       cursor: pointer;
       transition: all 0.3s ease;
       min-height: 80px;
+      min-width: 100px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      text-align: center;
     }
     
     .lecture-cell:hover {
@@ -162,11 +175,11 @@
       font-weight: 600;
       color: #2c3e50;
       margin-bottom: 5px;
-      text-align: center;
+      font-size: 0.9rem;
     }
     
     .lecture-code {
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       color: #6c757d;
       margin-bottom: 8px;
     }
@@ -179,8 +192,9 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       transition: background 0.3s;
+      min-width: 60px;
     }
     
     .lecture-btn:hover {
@@ -191,6 +205,16 @@
       margin-top: 20px;
       color: #6c757d;
       font-style: italic;
+      font-size: 0.9rem;
+    }
+    
+    /* Scroll hint for mobile */
+    .scroll-hint {
+      display: none;
+      text-align: center;
+      color: #6c757d;
+      font-size: 0.9rem;
+      margin-top: 10px;
     }
     
     /* Lecture View */
@@ -199,6 +223,7 @@
       align-items: center;
       gap: 15px;
       margin-bottom: 25px;
+      flex-wrap: wrap;
     }
     
     .lecture-title {
@@ -210,12 +235,14 @@
       display: flex;
       gap: 15px;
       margin-top: 25px;
+      flex-wrap: wrap;
     }
     
     .action-buttons {
       display: flex;
       gap: 15px;
       flex: 1;
+      flex-wrap: wrap;
     }
     
     .attendance-list-btn {
@@ -237,14 +264,18 @@
       border: 2px solid #e6e9ef;
     }
     
-    .session-id {
-      font-family: monospace;
+    .qr-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .qr-code-wrapper {
+      padding: 20px;
       background: white;
-      padding: 10px 15px;
-      border-radius: 8px;
-      margin: 15px 0;
-      word-break: break-all;
-      border: 1px solid #ddd;
+      border-radius: 12px;
+      border: 2px solid #e6e9ef;
     }
     
     /* Attendance List */
@@ -265,6 +296,7 @@
       border-radius: 8px;
       margin-bottom: 10px;
       border: 1px solid #e6e9ef;
+      flex-wrap: wrap;
     }
     
     /* Scanner */
@@ -312,9 +344,11 @@
     /* Common */
     .wrap {
       background: #fff;
-      padding: 30px;
+      padding: 20px;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(20,30,50,0.1);
+      max-width: 100%;
+      overflow: hidden;
     }
     
     .back-btn {
@@ -327,6 +361,7 @@
       margin-bottom: 20px;
       font-weight: 600;
       transition: background 0.3s;
+      font-size: 0.9rem;
     }
     
     .back-btn:hover {
@@ -352,6 +387,7 @@
       cursor: pointer;
       font-weight: 600;
       transition: all 0.3s;
+      font-size: 0.9rem;
     }
     
     .primary-btn {
@@ -386,6 +422,7 @@
       border-radius: 6px;
       margin-top: 15px;
       font-weight: 600;
+      font-size: 0.9rem;
     }
     
     .status.success {
@@ -400,17 +437,53 @@
       border: 1px solid #f5c6cb;
     }
     
-    @media (max-width: 900px) {
-      .days-header, .lecture-slots {
-        grid-template-columns: 80px repeat(3, 1fr);
+    @media (max-width: 768px) {
+      .wrap {
+        padding: 15px;
       }
       
-      .lecture-cell:nth-child(n+5) {
-        display: none;
+      .timetable-grid {
+        padding: 15px;
+        margin: 0 -10px;
+      }
+      
+      .scroll-hint {
+        display: block;
+      }
+      
+      .days-header, .lecture-slots {
+        min-width: 700px;
+      }
+      
+      .day-header, .time-slot, .lecture-cell {
+        min-width: 90px;
+      }
+      
+      .lecture-name {
+        font-size: 0.8rem;
+      }
+      
+      .lecture-code {
+        font-size: 0.7rem;
+      }
+      
+      .lecture-btn {
+        font-size: 0.7rem;
+        padding: 5px 8px;
+        min-width: 50px;
+      }
+      
+      .qr-code-wrapper {
+        padding: 15px;
       }
     }
     
     @media (max-width: 600px) {
+      body {
+        padding: 10px;
+        align-items: flex-start;
+      }
+      
       .button-container {
         flex-direction: column;
         align-items: center;
@@ -419,23 +492,50 @@
       .role-btn {
         width: 100%;
         max-width: 300px;
+        font-size: 1rem;
       }
       
       .lecture-actions {
         flex-direction: column;
       }
       
-      .days-header, .lecture-slots {
-        grid-template-columns: 60px repeat(2, 1fr);
-        font-size: 0.9rem;
+      .action-buttons {
+        flex-direction: column;
       }
       
-      .lecture-cell:nth-child(n+4) {
-        display: none;
+      .days-header, .lecture-slots {
+        min-width: 650px;
       }
       
       h1 {
         font-size: 2rem;
+      }
+      
+      .panel-title {
+        font-size: 1.5rem;
+      }
+      
+      .lecture-title {
+        font-size: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      .days-header, .lecture-slots {
+        min-width: 600px;
+      }
+      
+      .day-header, .time-slot, .lecture-cell {
+        min-width: 80px;
+        padding: 10px;
+      }
+      
+      .lecture-name {
+        font-size: 0.75rem;
+      }
+      
+      .qr-code-wrapper {
+        padding: 10px;
       }
     }
   </style>
@@ -468,22 +568,25 @@
       <p class="note">Click M.A. (Mark Attendance) on any lecture to start attendance session</p>
       
       <div class="timetable-grid">
-        <div class="days-header">
-          <div class="day-header">Time</div>
-          <div class="day-header">Monday</div>
-          <div class="day-header">Tuesday</div>
-          <div class="day-header">Wednesday</div>
-          <div class="day-header">Thursday</div>
-          <div class="day-header">Friday</div>
-          <div class="day-header">Saturday</div>
+        <div class="timetable-container">
+          <div class="days-header">
+            <div class="day-header">Time</div>
+            <div class="day-header">Monday</div>
+            <div class="day-header">Tuesday</div>
+            <div class="day-header">Wednesday</div>
+            <div class="day-header">Thursday</div>
+            <div class="day-header">Friday</div>
+            <div class="day-header">Saturday</div>
+          </div>
+          
+          <div class="lecture-slots" id="professorLectures">
+            <!-- Lecture slots will be generated here -->
+          </div>
         </div>
-        
-        <div class="lecture-slots" id="professorLectures">
-          <!-- Lecture slots will be generated here -->
-        </div>
-        
-        <p class="saturday-note">Note: Saturday has 3 lectures (Lecture 5-7 not available)</p>
       </div>
+      
+      <p class="saturday-note">Note: Saturday has 3 lectures (Lecture 5-7 not available)</p>
+      <p class="scroll-hint"><i class="fas fa-arrows-left-right"></i> Scroll horizontally to view full timetable</p>
     </div>
   </div>
   
@@ -498,22 +601,25 @@
       <p class="note">Click S.A. (Scan Attendance) on any lecture to scan attendance QR</p>
       
       <div class="timetable-grid">
-        <div class="days-header">
-          <div class="day-header">Time</div>
-          <div class="day-header">Monday</div>
-          <div class="day-header">Tuesday</div>
-          <div class="day-header">Wednesday</div>
-          <div class="day-header">Thursday</div>
-          <div class="day-header">Friday</div>
-          <div class="day-header">Saturday</div>
+        <div class="timetable-container">
+          <div class="days-header">
+            <div class="day-header">Time</div>
+            <div class="day-header">Monday</div>
+            <div class="day-header">Tuesday</div>
+            <div class="day-header">Wednesday</div>
+            <div class="day-header">Thursday</div>
+            <div class="day-header">Friday</div>
+            <div class="day-header">Saturday</div>
+          </div>
+          
+          <div class="lecture-slots" id="studentLectures">
+            <!-- Lecture slots will be generated here -->
+          </div>
         </div>
-        
-        <div class="lecture-slots" id="studentLectures">
-          <!-- Lecture slots will be generated here -->
-        </div>
-        
-        <p class="saturday-note">Note: Saturday has 3 lectures (Lecture 5-7 not available)</p>
       </div>
+      
+      <p class="saturday-note">Note: Saturday has 3 lectures (Lecture 5-7 not available)</p>
+      <p class="scroll-hint"><i class="fas fa-arrows-left-right"></i> Scroll horizontally to view full timetable</p>
     </div>
   </div>
   
@@ -543,15 +649,16 @@
       <!-- QR Section -->
       <div id="qrSection">
         <h3><i class="fas fa-qrcode"></i> Attendance QR Code</h3>
-        <p>Students should scan this QR code to mark attendance for <strong id="lectureNameQR"></strong></p>
+        <p>Students should scan this QR code to mark attendance for:</p>
+        <h4 style="text-align: center; margin: 15px 0; color: #2c3e50;" id="lectureNameQR">Lecture Name</h4>
         
-        <div class="session-id">
-          Session ID: <span id="sessionIdDisplay">Loading...</span>
+        <div class="qr-container">
+          <div class="qr-code-wrapper">
+            <div id="qrcode"></div>
+          </div>
         </div>
         
-        <div id="qrcode" style="margin: 20px 0;"></div>
-        
-        <div class="status success" id="attendanceCounter">
+        <div class="status success" id="attendanceCounter" style="text-align: center; margin-top: 20px;">
           <i class="fas fa-users"></i> Attendance Marked: <span id="counter">0</span> students
         </div>
       </div>
@@ -631,7 +738,6 @@
     const viewListBtn = document.getElementById('viewListBtn');
     const qrSection = document.getElementById('qrSection');
     const attendanceList = document.getElementById('attendanceList');
-    const sessionIdDisplay = document.getElementById('sessionIdDisplay');
     const lectureNameQR = document.getElementById('lectureNameQR');
     const counter = document.getElementById('counter');
     const attendanceItems = document.getElementById('attendanceItems');
@@ -848,7 +954,6 @@
       
       if (savedSession) {
         currentSession = JSON.parse(savedSession);
-        sessionIdDisplay.textContent = currentSession.id;
         updateAttendanceCounter();
         updateAttendanceList();
       } else {
@@ -857,42 +962,21 @@
     }
 
     function createNewSession() {
-      const timestamp = Date.now();
-      const randomBytes = crypto.getRandomValues(new Uint8Array(8));
-      const randomHex = Array.from(randomBytes).map(b => b.toString(16).padStart(2, '0')).join('');
-      
       currentSession = {
-        id: `ATTENDANCE_${timestamp}_${randomHex}`,
+        id: generateSessionId(),
         lecture: currentLectureData,
         attendees: [],
-        createdAt: timestamp,
+        createdAt: Date.now(),
         qrGenerated: false
       };
-      
-      sessionIdDisplay.textContent = currentSession.id;
       
       // Save to localStorage
       const sessionKey = `session_${currentLectureData.day}_${currentLectureData.code}`;
       localStorage.setItem(sessionKey, JSON.stringify(currentSession));
-      
-      // Also save to global sessions list
-      saveToSessionsList();
     }
 
-    function saveToSessionsList() {
-      let sessions = JSON.parse(localStorage.getItem('all_sessions') || '[]');
-      
-      // Check if session already exists
-      const exists = sessions.some(s => s.id === currentSession.id);
-      if (!exists) {
-        sessions.push({
-          id: currentSession.id,
-          lecture: currentSession.lecture,
-          createdAt: currentSession.createdAt,
-          attendeeCount: currentSession.attendees.length
-        });
-        localStorage.setItem('all_sessions', JSON.stringify(sessions));
-      }
+    function generateSessionId() {
+      return `${currentLectureData.day}_${currentLectureData.code}_${Date.now()}`;
     }
 
     // QR Code Functions
@@ -912,14 +996,13 @@
       const qrcodeContainer = document.getElementById('qrcode');
       qrcodeContainer.innerHTML = '';
       
+      // Simple QR data: just day and lecture code
+      const qrData = `${currentLectureData.day}|${currentLectureData.code}`;
+      
       qrcode = new QRCode(qrcodeContainer, {
-        text: JSON.stringify({
-          sessionId: currentSession.id,
-          lecture: currentLectureData,
-          timestamp: Date.now()
-        }),
-        width: 256,
-        height: 256,
+        text: qrData,
+        width: 300,
+        height: 300,
         colorDark: '#000000',
         colorLight: '#ffffff',
         correctLevel: QRCode.CorrectLevel.H
@@ -964,7 +1047,6 @@
     function saveSession() {
       const sessionKey = `session_${currentLectureData.day}_${currentLectureData.code}`;
       localStorage.setItem(sessionKey, JSON.stringify(currentSession));
-      saveToSessionsList();
     }
 
     // Scanner Functions
@@ -1030,12 +1112,20 @@
         const code = jsQR(imageData.data, imageData.width, imageData.height);
         
         if (code) {
-          try {
-            const scannedData = JSON.parse(code.data);
+          const scannedData = code.data;
+          
+          // QR data format: "Monday|CS101"
+          const parts = scannedData.split('|');
+          if (parts.length === 2) {
+            const [day, lectureCode] = parts;
             
-            if (scannedData.sessionId && scannedData.lecture) {
+            // Find lecture from timetable
+            const lectureIndex = lectures.findIndex(l => l.code === lectureCode);
+            if (lectureIndex !== -1) {
+              const lecture = lectures[lectureIndex];
+              
               // Find the session
-              const sessionKey = `session_${scannedData.lecture.day}_${scannedData.lecture.code}`;
+              const sessionKey = `session_${day}_${lectureCode}`;
               const savedSession = localStorage.getItem(sessionKey);
               
               if (savedSession) {
@@ -1050,14 +1140,14 @@
                   session.attendees.push({
                     studentId: studentId,
                     timestamp: Date.now(),
-                    lecture: scannedData.lecture
+                    lecture: { day, code: lectureCode, name: lecture.name, time: lecture.time }
                   });
                   
                   // Save updated session
                   localStorage.setItem(sessionKey, JSON.stringify(session));
                   
                   // Show success
-                  markedLectureName.textContent = `${scannedData.lecture.name} (${scannedData.lecture.day})`;
+                  markedLectureName.textContent = `${lecture.name} (${day})`;
                   scanTime.textContent = new Date().toLocaleTimeString();
                   
                   // Auto-stop camera and show result
@@ -1066,8 +1156,8 @@
                   
                   // Notify professor view if open
                   if (currentLectureData && 
-                      currentLectureData.day === scannedData.lecture.day &&
-                      currentLectureData.code === scannedData.lecture.code) {
+                      currentLectureData.day === day &&
+                      currentLectureData.code === lectureCode) {
                     currentSession = session;
                     updateAttendanceCounter();
                     updateAttendanceList();
@@ -1090,8 +1180,11 @@
                 scanStatus.className = 'status error';
                 scanStatus.textContent = 'Invalid attendance session.';
               }
+            } else {
+              scanStatus.className = 'status error';
+              scanStatus.textContent = 'Lecture not found in timetable.';
             }
-          } catch (e) {
+          } else {
             scanStatus.className = 'status error';
             scanStatus.textContent = 'Not a valid attendance QR code.';
           }
