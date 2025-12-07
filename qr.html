@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Attendance App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: system-ui, Segoe UI, Roboto, Arial;
+      background: #f7f8fb;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    #dashboard {
+      max-width: 800px;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .welcome-card {
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(20,30,50,0.1);
+      margin-bottom: 30px;
+    }
+    
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+    }
+    
+    .welcome-text {
+      color: #7f8c8d;
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+    
+    .button-container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .role-btn {
+      padding: 16px 32px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      min-width: 180px;
+    }
+    
+    #professorBtn {
+      background: #0b5fff;
+      color: white;
+    }
+    
+    #professorBtn:hover {
+      background: #004ad9;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(11, 95, 255, 0.3);
+    }
+    
+    #studentBtn {
+      background: #28a745;
+      color: white;
+    }
+    
+    #studentBtn:hover {
+      background: #218838;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    }
+    
+    /* QR Generator Styles */
+    #qrGenerator {
+      display: none;
+      max-width: 800px;
+      width: 100%;
+    }
+    
+    /* Student Scanner Styles */
+    #studentScanner {
+      display: none;
+      max-width: 800px;
+      width: 100%;
+    }
+    
+    .wrap {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(20,30,50,0.1);
+    }
+    
+    .back-btn {
+      background: #6c757d;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    
+    .back-btn:hover {
+      background: #545b62;
+    }
+    
+    .panel-title {
+      color: #2c3e50;
+      margin-bottom: 10px;
+      font-size: 1.8rem;
+    }
+    
+    .note {
+      color: #7f8c8d;
+      margin-bottom: 25px;
+      font-size: 1rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #495057;
+      text-align: left;
+    }
+    
+    textarea, input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: system-ui, Segoe UI, Roboto, Arial;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+    
+    .row {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .size-control {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .primary-btn {
+      background: #0b5fff;
+      color: white;
+    }
+    
+    .primary-btn:hover {
+      background: #004ad9;
+    }
+    
+    .secondary-btn {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .secondary-btn:hover {
+      background: #545b62;
+    }
+    
+    .success-btn {
+      background: #28a745;
+      color: white;
+    }
+    
+    .success-btn:hover {
+      background: #218838;
+    }
+    
+    #qrcode {
+      margin-top: 30px;
+      padding: 20px;
+      border: 2px dashed #e6e9ef;
+      border-radius: 10px;
+      background: #f8f9fa;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .qrcode-placeholder {
+      color: #adb5bd;
+      font-style: italic;
+    }
+    
+    /* Scanner Styles */
+    #scannerContainer {
+      margin-top: 20px;
+      position: relative;
+    }
+    
+    #video {
+      display: none;
+    }
+    
+    #canvas {
+  width: 100%;
+  max-width: 500px;
+  max-height: 400px;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  margin: 20px auto;
+  display: block;
+  object-fit: contain;
+  background: #000;
+}
+    
+    #scanResult {
+      margin-top: 20px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border-left: 4px solid #28a745;
+      text-align: left;
+    }
+    
+    #resultText {
+      font-family: monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    
+    .camera-placeholder {
+  width: 100%;
+  max-width: 500px;
+  height: 400px;
+  background: #f8f9fa;
+  border: 2px dashed #adb5bd;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  margin: 20px auto;
+}
+    
+    .scanner-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    
+    .status {
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+    
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .attendance-counter {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      text-align: center;
+      border: 2px solid #e6e9ef;
+    }
+    
+    .counter-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #0b5fff;
+      margin: 10px 0;
+    }
+    
+    @media (max-width: 600px) {
+      .button-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .role-btn {
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .controls, .scanner-buttons {
+        justify-content: center;
+      }
+      
+      .row {
+        flex-direction: column;
+      }
+      
+      .size-control {
+        width: 100%;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Dashboard -->
+  <div id="dashboard">
+    <div class="welcome-card">
+      <h1>Welcome to Attendance App</h1>
+      <p class="welcome-text">Select your role to continue. Professors can generate QR codes for attendance, students can scan them.</p>
+      <div class="button-container">
+        <button id="professorBtn" class="role-btn">
+          <i class="fas fa-chalkboard-teacher"></i> Professor
+        </button>
+        <button id="studentBtn" class="role-btn">
+          <i class="fas fa-user-graduate"></i> Student
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- QR Code Generator -->
+  <div id="qrGenerator">
+    <div class="wrap">
+      <button id="backBtn" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </button>
+      
+      <h2 class="panel-title">QR Code Generator</h2>
+      <p class="note">Generate a cryptographic QR code for attendance. Each code is unique and increases counter when scanned.</p>
+
+      <div class="row">
+        <div class="size-control">
+          <label for="size">QR Code Size (px)</label>
+          <input id="size" type="number" min="64" max="2048" value="256" />
+        </div>
+
+        <div class="controls">
+          <button id="gen" class="primary-btn">
+            <i class="fas fa-qrcode"></i> Generate New QR
+          </button>
+          <button id="download" class="secondary-btn">
+            <i class="fas fa-download"></i> Download PNG
+          </button>
+        </div>
+      </div>
+
+      <div id="qrcode" aria-live="polite">
+        <div class="qrcode-placeholder">Click "Generate New QR" to create attendance code</div>
+      </div>
+      
+      <div class="attendance-counter">
+        <h3><i class="fas fa-users"></i> Attendance Counter</h3>
+        <div class="counter-number" id="counter">0</div>
+        <p>Students scanned: <span id="scannedCount">0</span></p>
+        <button id="resetCounter" class="secondary-btn" style="margin-top: 10px;">
+          <i class="fas fa-redo"></i> Reset Counter
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Student QR Scanner -->
+  <div id="studentScanner">
+    <div class="wrap">
+      <button id="backBtnStudent" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </button>
+      
+      <h2 class="panel-title">QR Code Scanner</h2>
+      <p class="note">Click "Start Camera" to scan attendance QR codes.</p>
+      
+      <div class="scanner-buttons">
+        <button id="startCamera" class="success-btn">
+          <i class="fas fa-camera"></i> Start Camera
+        </button>
+        <button id="stopCamera" class="secondary-btn" style="display: none;">
+          <i class="fas fa-stop"></i> Stop Camera
+        </button>
+      </div>
+      
+      <div id="scannerContainer">
+        <div class="camera-placeholder" id="cameraPlaceholder">
+          <i class="fas fa-camera" style="font-size: 48px; margin-bottom: 15px;"></i>
+          <p>Click "Start Camera" to begin</p>
+        </div>
+        <canvas id="canvas"></canvas>
+      </div>
+      
+      <div id="scanStatus" class="status" style="display: none;"></div>
+      
+      <div id="scanResult" style="display: none;">
+        <h3><i class="fas fa-check-circle"></i> QR Code Scanned Successfully!</h3>
+        <p>Attendance Marked</p>
+        <pre id="resultText"></pre>
+        <button id="scanAgain" class="success-btn" style="margin-top: 15px;">
+          <i class="fas fa-redo"></i> Scan Another QR
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QRCode.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    // DOM Elements
+    const dashboard = document.getElementById('dashboard');
+    const qrGenerator = document.getElementById('qrGenerator');
+    const studentScanner = document.getElementById('studentScanner');
+    
+    const professorBtn = document.getElementById('professorBtn');
+    const studentBtn = document.getElementById('studentBtn');
+    const backBtn = document.getElementById('backBtn');
+    const backBtnStudent = document.getElementById('backBtnStudent');
+    
+    // QR Code Elements
+    const textEl = document.getElementById('text');
+    const sizeEl = document.getElementById('size');
+    const genBtn = document.getElementById('gen');
+    const downloadBtn = document.getElementById('download');
+    const qrcodeContainer = document.getElementById('qrcode');
+    const counterEl = document.getElementById('counter');
+    const scannedCountEl = document.getElementById('scannedCount');
+    const resetCounterBtn = document.getElementById('resetCounter');
+    
+    // Scanner Elements
+    const startCameraBtn = document.getElementById('startCamera');
+    const stopCameraBtn = document.getElementById('stopCamera');
+    const canvas = document.getElementById('canvas');
+    const cameraPlaceholder = document.getElementById('cameraPlaceholder');
+    const scanResult = document.getElementById('scanResult');
+    const resultText = document.getElementById('resultText');
+    const scanStatus = document.getElementById('scanStatus');
+    const scanAgainBtn = document.getElementById('scanAgain');
+    
+    // Global variables
+    let qrcode = null;
+    let stream = null;
+    let scanning = false;
+    let currentSessionId = null;
+    let attendanceCounter = 0;
+    let scannedCodes = new Set(); // Track scanned codes to prevent duplicates
+    
+    // Dashboard Navigation
+    professorBtn.addEventListener('click', () => {
+      dashboard.style.display = 'none';
+      studentScanner.style.display = 'none';
+      qrGenerator.style.display = 'block';
+    });
+
+    studentBtn.addEventListener('click', () => {
+      dashboard.style.display = 'none';
+      qrGenerator.style.display = 'none';
+      studentScanner.style.display = 'block';
+    });
+
+    backBtn.addEventListener('click', () => {
+      qrGenerator.style.display = 'none';
+      dashboard.style.display = 'block';
+    });
+
+    backBtnStudent.addEventListener('click', () => {
+      stopCamera();
+      studentScanner.style.display = 'none';
+      dashboard.style.display = 'block';
+    });
+
+    // Generate cryptographically random QR code
+    function generateRandomCode() {
+      // Create a unique session ID with timestamp and random bytes
+      const timestamp = Date.now();
+      const randomBytes = crypto.getRandomValues(new Uint8Array(8));
+      const randomHex = Array.from(randomBytes).map(b => b.toString(16).padStart(2, '0')).join('');
+      
+      currentSessionId = `ATTENDANCE_${timestamp}_${randomHex}`;
+      return currentSessionId;
+    }
+
+    // QR Code Functions
+    function generate() {
+      const size = Math.max(64, Math.min(2048, parseInt(sizeEl.value) || 256));
+      qrcodeContainer.innerHTML = '';
+      
+      const randomCode = generateRandomCode();
+      
+      qrcode = new QRCode(qrcodeContainer, {
+        text: randomCode,
+        width: size,
+        height: size,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      });
+      
+      // Store in localStorage for persistence
+      localStorage.setItem('currentQRCode', randomCode);
+      localStorage.setItem('attendanceCounter', attendanceCounter.toString());
+    }
+
+    function download() {
+      if (!qrcodeContainer) return;
+      
+      const img = qrcodeContainer.querySelector('img');
+      if (img && img.src) {
+        triggerDownload(img.src, 'attendance_qr.png');
+        return;
+      }
+      
+      const canvas = qrcodeContainer.querySelector('canvas');
+      if (canvas) {
+        const data = canvas.toDataURL('image/png');
+        triggerDownload(data, 'attendance_qr.png');
+        return;
+      }
+      
+      alert('Please generate a QR code first');
+    }
+
+    function triggerDownload(dataUrl, filename) {
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    function updateCounter() {
+      counterEl.textContent = attendanceCounter;
+      scannedCountEl.textContent = scannedCodes.size;
+      
+      // Store in localStorage
+      localStorage.setItem('attendanceCounter', attendanceCounter.toString());
+    }
+
+    // Scanner Functions
+    async function startCamera() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: 'environment',
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          }
+        });
+        
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        video.setAttribute('playsinline', true);
+        video.play();
+        
+        cameraPlaceholder.style.display = 'none';
+        startCameraBtn.style.display = 'none';
+        stopCameraBtn.style.display = 'inline-block';
+        scanning = true;
+        
+        scanStatus.style.display = 'block';
+        scanStatus.className = 'status success';
+        scanStatus.textContent = 'Camera started. Point at QR code to scan.';
+        
+        // Start scanning
+        requestAnimationFrame(() => scanFrame(video));
+        
+      } catch (err) {
+        console.error('Error accessing camera:', err);
+        scanStatus.style.display = 'block';
+        scanStatus.className = 'status error';
+        scanStatus.textContent = 'Error accessing camera. Please check permissions.';
+      }
+    }
+
+    function stopCamera() {
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+    stream = null;
+  }
+  
+  cameraPlaceholder.style.display = 'flex';
+  startCameraBtn.style.display = 'inline-block';
+  stopCameraBtn.style.display = 'none';
+  scanning = false;
+  scanStatus.style.display = 'none';
+  scanResult.style.display = 'none';
+  
+  // Clear the canvas
+  const context = canvas.getContext('2d');
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Reset canvas dimensions
+  canvas.width = 0;
+  canvas.height = 0;
+}
+
+    function scanFrame(video) {
+      if (!scanning) return;
+      
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, imageData.width, imageData.height);
+        
+        if (code) {
+          const scannedData = code.data;
+          
+          // Check if this is an attendance QR code
+          if (scannedData.startsWith('ATTENDANCE_')) {
+            // Check if already scanned
+            if (!scannedCodes.has(scannedData)) {
+              scannedCodes.add(scannedData);
+              attendanceCounter++;
+              updateCounter();
+              
+              // Show success
+              resultText.textContent = `Code: ${scannedData}\nTime: ${new Date().toLocaleTimeString()}`;
+              scanResult.style.display = 'block';
+              
+              scanStatus.className = 'status success';
+              scanStatus.textContent = `Attendance recorded! Total: ${attendanceCounter}`;
+              
+              // Draw green box
+              context.strokeStyle = '#28a745';
+              context.lineWidth = 4;
+              context.strokeRect(
+                code.location.topLeftCorner.x,
+                code.location.topLeftCorner.y,
+                code.location.bottomRightCorner.x - code.location.topLeftCorner.x,
+                code.location.bottomRightCorner.y - code.location.topLeftCorner.y
+              );
+              
+              // Store scanned codes
+              localStorage.setItem('scannedCodes', JSON.stringify(Array.from(scannedCodes)));
+              
+              // Stop scanning for 3 seconds
+              setTimeout(() => {
+                scanResult.style.display = 'none';
+              }, 3000);
+            } else {
+              scanStatus.className = 'status';
+              scanStatus.textContent = 'Code already scanned';
+            }
+          } else {
+            scanStatus.className = 'status';
+            scanStatus.textContent = 'Not a valid attendance code';
+          }
+        }
+      }
+      
+      if (scanning) {
+        requestAnimationFrame(() => scanFrame(video));
+      }
+    }
+
+    // Event Listeners
+    startCameraBtn.addEventListener('click', startCamera);
+    stopCameraBtn.addEventListener('click', stopCamera);
+    
+    scanAgainBtn.addEventListener('click', () => {
+      scanResult.style.display = 'none';
+    });
+
+    // QR Code Event Listeners
+    genBtn.addEventListener('click', generate);
+    downloadBtn.addEventListener('click', download);
+    
+    resetCounterBtn.addEventListener('click', () => {
+      if (confirm('Reset attendance counter?')) {
+        attendanceCounter = 0;
+        scannedCodes.clear();
+        updateCounter();
+        localStorage.removeItem('scannedCodes');
+      }
+    });
+
+    // Load saved data
+    function loadSavedData() {
+      const savedCounter = localStorage.getItem('attendanceCounter');
+      if (savedCounter) {
+        attendanceCounter = parseInt(savedCounter);
+      }
+      
+      const savedScanned = localStorage.getItem('scannedCodes');
+      if (savedScanned) {
+        scannedCodes = new Set(JSON.parse(savedScanned));
+      }
+      
+      const savedQR = localStorage.getItem('currentQRCode');
+      if (savedQR) {
+        currentSessionId = savedQR;
+      }
+      
+      updateCounter();
+    }
+
+    // Initialize
+    loadSavedData();
+    generate(); // Generate initial QR code
+  </script>
+</body>
+</html>
