@@ -331,6 +331,18 @@
       justify-content: center;
     }
     
+    .session-info {
+      font-family: monospace;
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 15px;
+      border: 1px solid #e6e9ef;
+      font-size: 0.9rem;
+      word-break: break-all;
+      text-align: center;
+    }
+    
     /* Attendance List */
     #attendanceList {
       display: none;
@@ -752,7 +764,7 @@
       <div class="lecture-actions">
         <div class="action-buttons">
           <button id="showQRBtn" class="primary-btn">
-            <i class="fas fa-qrcode"></i> Show QR for Attendance
+            <i class="fas fa-qrcode"></i> Generate New QR Session
           </button>
           <button id="viewListBtn" class="attendance-list-btn">
             <i class="fas fa-list"></i> View Attendance List
@@ -762,14 +774,18 @@
       
       <!-- QR Section -->
       <div id="qrSection">
-        <h3><i class="fas fa-qrcode"></i> Attendance QR Code</h3>
-        <p>Students should scan this QR code to mark attendance for:</p>
+        <h3><i class="fas fa-qrcode"></i> Active QR Session</h3>
+        <p>This QR code is valid for attendance marking. It will expire after being scanned or when a new one is generated.</p>
         <h4 style="text-align: center; margin: 15px 0; color: #2c3e50;" id="lectureNameQR">Lecture Name</h4>
         
         <div class="qr-container">
           <div class="qr-code-wrapper">
             <div id="qrcode"></div>
           </div>
+        </div>
+        
+        <div class="session-info">
+          Session ID: <span id="sessionIdDisplay">Loading...</span>
         </div>
         
         <div class="status success" id="attendanceCounter" style="text-align: center; margin-top: 20px;">
@@ -785,7 +801,7 @@
             <i class="fas fa-sync-alt"></i> Refresh
           </button>
         </div>
-        <p>Students who have marked attendance for this session:</p>
+        <p>Students who have marked attendance for this lecture:</p>
         <div id="attendanceItems">
           <!-- Attendance items will appear here -->
         </div>
@@ -873,6 +889,7 @@
     const attendanceItems = document.getElementById('attendanceItems');
     const currentLecture = document.getElementById('currentLecture');
     const refreshListBtn = document.getElementById('refreshListBtn');
+    const sessionIdDisplay = document.getElementById('sessionIdDisplay');
     
     // Student info elements
     const displayStudentName = document.getElementById('displayStudentName');
@@ -1104,7 +1121,7 @@
       attendanceList.style.display = 'none';
       
       // Load existing session or create new
-      loadOrCreateSession();
+      loadLectureData();
     }
 
     // Open Student Lecture View
@@ -1129,10 +1146,18 @@
       cameraPlaceholder.style.display = 'flex';
       canvas.style.display = 'none';
       scanStatus.style.display = 'none';
+      stopCamera(); // Ensure camera is stopped
     }
 
-    // Session Management
-    function loadOrCreateSession() {
+    // Generate cryptographically random token
+    function generateSecureToken() {
+      const array = new Uint8Array(16);
+      crypto.getRandomValues(array);
+      return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Load lecture data (attendees list)
+    function loadLectureData() {
       const sessionKey = `session_${currentLectureData.day}_${currentLectureData.code}`;
       const savedSession = localStorage.getItem(sessionKey);
       
@@ -1141,47 +1166,61 @@
         updateAttendanceCounter();
         updateAttendanceList();
       } else {
-        createNewSession();
+        currentSession = {
+          lecture: currentLectureData,
+          attendees: [],
+          activeToken: null,
+          tokens: {} // Store used tokens
+        };
       }
     }
 
-    function createNewSession() {
-      currentSession = {
-        id: generateSessionId(),
-        lecture: currentLectureData,
-        attendees: [],
-        createdAt: Date.now(),
-        qrGenerated: false
+    // Generate new QR session
+    function generateNewQRSession() {
+      // Generate cryptographically random token
+      const token = generateSecureToken();
+      const timestamp = Date.now();
+      
+      // Create session data
+      const sessionData = {
+        day: currentLectureData.day,
+        code: currentLectureData.code,
+        token: token,
+        timestamp: timestamp,
+        id: `${currentLectureData.day}_${currentLectureData.code}_${timestamp}`
       };
+      
+      // Update current session
+      currentSession.activeToken = token;
+      currentSession.lastGenerated = timestamp;
+      currentSession.sessionId = sessionData.id;
       
       // Save to localStorage
       const sessionKey = `session_${currentLectureData.day}_${currentLectureData.code}`;
       localStorage.setItem(sessionKey, JSON.stringify(currentSession));
-    }
-
-    function generateSessionId() {
-      return `${currentLectureData.day}_${currentLectureData.code}_${Date.now()}`;
+      
+      // Generate QR code
+      generateQRCode(sessionData);
+      sessionIdDisplay.textContent = sessionData.id;
+      
+      // Show QR section
+      qrSection.style.display = 'block';
+      attendanceList.style.display = 'none';
     }
 
     // QR Code Functions
     showQRBtn.addEventListener('click', () => {
-      qrSection.style.display = 'block';
-      attendanceList.style.display = 'none';
-      
-      // Generate QR code
-      generateQRCode();
-      currentSession.qrGenerated = true;
-      saveSession();
+      generateNewQRSession();
     });
 
-    function generateQRCode() {
+    function generateQRCode(sessionData) {
       const qrcodeContainer = document.getElementById('qrcode');
       qrcodeContainer.innerHTML = '';
       
-      // Simple QR data: just day and lecture code
-      const qrData = `${currentLectureData.day}|${currentLectureData.code}`;
+      // QR data: day|code|token|timestamp
+      const qrData = `${sessionData.day}|${sessionData.code}|${sessionData.token}|${sessionData.timestamp}`;
       
-      // Create QR code with larger size - FIX FOR LAPTOP
+      // Create QR code
       qrcode = new QRCode(qrcodeContainer, {
         text: qrData,
         width: 250,
@@ -1223,6 +1262,9 @@
         return;
       }
       
+      // Sort attendees by timestamp (newest first)
+      currentSession.attendees.sort((a, b) => b.timestamp - a.timestamp);
+      
       currentSession.attendees.forEach((attendee, index) => {
         const item = document.createElement('div');
         item.className = 'attendance-item';
@@ -1230,9 +1272,11 @@
           <div>
             <strong>${attendee.studentName || `Student ${index + 1}`}</strong>
             <div style="font-size: 0.9rem; color: #6c757d;">ID: ${attendee.studentId || 'N/A'}</div>
+            <div style="font-size: 0.8rem; color: #999;">Via token: ${attendee.tokenUsed ? attendee.tokenUsed.substring(0, 8) + '...' : 'N/A'}</div>
           </div>
           <div>
-            ${new Date(attendee.timestamp).toLocaleTimeString()}
+            ${new Date(attendee.timestamp).toLocaleTimeString()}<br>
+            <small>${new Date(attendee.timestamp).toLocaleDateString()}</small>
           </div>
         `;
         attendanceItems.appendChild(item);
@@ -1241,11 +1285,6 @@
 
     function updateAttendanceCounter() {
       counter.textContent = currentSession.attendees.length;
-    }
-
-    function saveSession() {
-      const sessionKey = `session_${currentLectureData.day}_${currentLectureData.code}`;
-      localStorage.setItem(sessionKey, JSON.stringify(currentSession));
     }
 
     // Scanner Functions
@@ -1313,10 +1352,10 @@
         if (code) {
           const scannedData = code.data;
           
-          // QR data format: "Monday|CS101"
+          // QR data format: "Monday|CS101|token|timestamp"
           const parts = scannedData.split('|');
-          if (parts.length === 2) {
-            const [day, lectureCode] = parts;
+          if (parts.length === 4) {
+            const [day, lectureCode, token, timestamp] = parts;
             
             // Find lecture from timetable
             const lectureIndex = lectures.findIndex(l => l.code === lectureCode);
@@ -1330,55 +1369,75 @@
               if (savedSession) {
                 const session = JSON.parse(savedSession);
                 
-                // Check if already scanned (by this student)
-                const studentId = currentStudentInfo.id;
-                const alreadyScanned = session.attendees.some(a => a.studentId === studentId);
+                // Check if token is valid and not used
+                const isTokenValid = session.activeToken === token;
+                const isTokenUsed = session.tokens && session.tokens[token];
                 
-                if (!alreadyScanned) {
-                  // Add to attendees with student info
-                  session.attendees.push({
-                    studentId: studentId,
-                    studentName: currentStudentInfo.name,
-                    timestamp: Date.now(),
-                    lecture: { day, code: lectureCode, name: lecture.name, time: lecture.time }
-                  });
+                if (isTokenValid && !isTokenUsed) {
+                  // Check if already scanned (by this student)
+                  const studentId = currentStudentInfo.id;
+                  const alreadyScanned = session.attendees.some(a => a.studentId === studentId);
                   
-                  // Save updated session
-                  localStorage.setItem(sessionKey, JSON.stringify(session));
-                  
-                  // Show success
-                  markedLectureName.textContent = `${lecture.name} (${day})`;
-                  scanTime.textContent = new Date().toLocaleTimeString();
-                  
-                  // Auto-stop camera and show result
-                  stopCamera();
-                  scannedLecture.style.display = 'block';
-                  
-                  // Notify professor view if open
-                  if (currentLectureData && 
-                      currentLectureData.day === day &&
-                      currentLectureData.code === lectureCode) {
-                    currentSession = session;
-                    updateAttendanceCounter();
-                    updateAttendanceList();
+                  if (!alreadyScanned) {
+                    // Mark token as used
+                    if (!session.tokens) session.tokens = {};
+                    session.tokens[token] = {
+                      usedBy: studentId,
+                      usedAt: Date.now()
+                    };
+                    
+                    // Add to attendees with student info
+                    session.attendees.push({
+                      studentId: studentId,
+                      studentName: currentStudentInfo.name,
+                      timestamp: Date.now(),
+                      tokenUsed: token,
+                      lecture: { day, code: lectureCode, name: lecture.name, time: lecture.time }
+                    });
+                    
+                    // Save updated session
+                    localStorage.setItem(sessionKey, JSON.stringify(session));
+                    
+                    // Show success
+                    markedLectureName.textContent = `${lecture.name} (${day})`;
+                    scanTime.textContent = new Date().toLocaleTimeString();
+                    
+                    // Auto-stop camera and show result
+                    stopCamera();
+                    scannedLecture.style.display = 'block';
+                    
+                    // Notify professor view if open
+                    if (currentLectureData && 
+                        currentLectureData.day === day &&
+                        currentLectureData.code === lectureCode) {
+                      currentSession = session;
+                      updateAttendanceCounter();
+                      updateAttendanceList();
+                    }
+                    
+                    // Draw green box
+                    context.strokeStyle = '#28a745';
+                    context.lineWidth = 4;
+                    context.strokeRect(
+                      code.location.topLeftCorner.x,
+                      code.location.topLeftCorner.y,
+                      code.location.bottomRightCorner.x - code.location.topLeftCorner.x,
+                      code.location.bottomRightCorner.y - code.location.topLeftCorner.y
+                    );
+                  } else {
+                    scanStatus.className = 'status';
+                    scanStatus.textContent = 'Attendance already marked for this lecture.';
                   }
-                  
-                  // Draw green box
-                  context.strokeStyle = '#28a745';
-                  context.lineWidth = 4;
-                  context.strokeRect(
-                    code.location.topLeftCorner.x,
-                    code.location.topLeftCorner.y,
-                    code.location.bottomRightCorner.x - code.location.topLeftCorner.x,
-                    code.location.bottomRightCorner.y - code.location.topLeftCorner.y
-                  );
+                } else if (isTokenUsed) {
+                  scanStatus.className = 'status error';
+                  scanStatus.textContent = 'This QR code has already been used.';
                 } else {
-                  scanStatus.className = 'status';
-                  scanStatus.textContent = 'Attendance already marked for this lecture.';
+                  scanStatus.className = 'status error';
+                  scanStatus.textContent = 'Invalid or expired QR code. Please get a new one from professor.';
                 }
               } else {
                 scanStatus.className = 'status error';
-                scanStatus.textContent = 'Invalid attendance session.';
+                scanStatus.textContent = 'No active session found for this lecture.';
               }
             } else {
               scanStatus.className = 'status error';
