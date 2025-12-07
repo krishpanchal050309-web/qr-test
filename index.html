@@ -91,6 +91,51 @@
       box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
     }
     
+    /* Student Name Input */
+    #studentNameInput {
+      display: none;
+      max-width: 500px;
+      width: 100%;
+    }
+    
+    .name-input-card {
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(20,30,50,0.1);
+      text-align: center;
+    }
+    
+    .name-input-form {
+      margin-top: 30px;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+      text-align: left;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #495057;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e6e9ef;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: #0b5fff;
+    }
+    
     /* Timetable Views */
     #professorTimetable, #studentTimetable, #lectureView, #studentLectureView {
       display: none;
@@ -276,6 +321,14 @@
       background: white;
       border-radius: 12px;
       border: 2px solid #e6e9ef;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    #qrcode {
+      display: flex;
+      justify-content: center;
     }
     
     /* Attendance List */
@@ -286,6 +339,24 @@
       background: #f8f9fa;
       border-radius: 12px;
       border: 2px solid #e6e9ef;
+    }
+    
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .refresh-btn {
+      background: #17a2b8;
+      color: white;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+    
+    .refresh-btn:hover {
+      background: #138496;
     }
     
     .attendance-item {
@@ -437,6 +508,15 @@
       border: 1px solid #f5c6cb;
     }
     
+    .student-info {
+      background: #f0f7ff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 2px solid #cce5ff;
+      text-align: center;
+    }
+    
     @media (max-width: 768px) {
       .wrap {
         padding: 15px;
@@ -557,6 +637,34 @@
     </div>
   </div>
   
+  <!-- Student Name Input -->
+  <div id="studentNameInput">
+    <div class="name-input-card">
+      <button id="backBtnStudentName" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </button>
+      
+      <h2 class="panel-title">Enter Your Details</h2>
+      <p class="note">Please enter your name to continue to the timetable</p>
+      
+      <div class="name-input-form">
+        <div class="form-group">
+          <label for="studentNameField">Your Name</label>
+          <input type="text" id="studentNameField" placeholder="Enter your full name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="studentIdField">Student ID (Optional)</label>
+          <input type="text" id="studentIdField" placeholder="Enter your student ID">
+        </div>
+        
+        <button id="submitStudentInfo" class="primary-btn" style="width: 100%;">
+          <i class="fas fa-check"></i> Continue to Timetable
+        </button>
+      </div>
+    </div>
+  </div>
+  
   <!-- Professor Timetable -->
   <div id="professorTimetable">
     <div class="wrap">
@@ -594,8 +702,14 @@
   <div id="studentTimetable">
     <div class="wrap">
       <button id="backBtnStudentTimetable" class="back-btn">
-        <i class="fas fa-arrow-left"></i> Back to Dashboard
+        <i class="fas fa-arrow-left"></i> Back
       </button>
+      
+      <div class="student-info">
+        <h3><i class="fas fa-user"></i> Student Info</h3>
+        <p>Name: <strong id="displayStudentName">Not set</strong></p>
+        <p>ID: <strong id="displayStudentId">Not set</strong></p>
+      </div>
       
       <h2 class="panel-title">Student Timetable</h2>
       <p class="note">Click S.A. (Scan Attendance) on any lecture to scan attendance QR</p>
@@ -665,7 +779,12 @@
       
       <!-- Attendance List -->
       <div id="attendanceList">
-        <h3><i class="fas fa-users"></i> Attendance List</h3>
+        <div class="list-header">
+          <h3><i class="fas fa-users"></i> Attendance List</h3>
+          <button id="refreshListBtn" class="refresh-btn">
+            <i class="fas fa-sync-alt"></i> Refresh
+          </button>
+        </div>
         <p>Students who have marked attendance for this session:</p>
         <div id="attendanceItems">
           <!-- Attendance items will appear here -->
@@ -680,6 +799,12 @@
       <button id="backBtnStudentLecture" class="back-btn">
         <i class="fas fa-arrow-left"></i> Back to Timetable
       </button>
+      
+      <div class="student-info">
+        <h3><i class="fas fa-user"></i> Student Info</h3>
+        <p>Name: <strong id="currentStudentName">Not set</strong></p>
+        <p>ID: <strong id="currentStudentId">Not set</strong></p>
+      </div>
       
       <h2 class="panel-title">Scan Attendance</h2>
       <p class="note" id="lectureInfo">Lecture: <span id="scannedLectureName">Loading...</span></p>
@@ -719,6 +844,7 @@
   <script>
     // DOM Elements
     const dashboard = document.getElementById('dashboard');
+    const studentNameInput = document.getElementById('studentNameInput');
     const professorTimetable = document.getElementById('professorTimetable');
     const studentTimetable = document.getElementById('studentTimetable');
     const lectureView = document.getElementById('lectureView');
@@ -726,6 +852,10 @@
     
     const professorBtn = document.getElementById('professorBtn');
     const studentBtn = document.getElementById('studentBtn');
+    const backBtnStudentName = document.getElementById('backBtnStudentName');
+    const submitStudentInfo = document.getElementById('submitStudentInfo');
+    const studentNameField = document.getElementById('studentNameField');
+    const studentIdField = document.getElementById('studentIdField');
     
     // Back buttons
     const backBtnProfessor = document.getElementById('backBtnProfessor');
@@ -742,6 +872,13 @@
     const counter = document.getElementById('counter');
     const attendanceItems = document.getElementById('attendanceItems');
     const currentLecture = document.getElementById('currentLecture');
+    const refreshListBtn = document.getElementById('refreshListBtn');
+    
+    // Student info elements
+    const displayStudentName = document.getElementById('displayStudentName');
+    const displayStudentId = document.getElementById('displayStudentId');
+    const currentStudentName = document.getElementById('currentStudentName');
+    const currentStudentId = document.getElementById('currentStudentId');
     
     // Scanner elements
     const startCameraBtn = document.getElementById('startCamera');
@@ -763,6 +900,7 @@
     let currentSession = null;
     let currentLectureData = null;
     let currentStudentLecture = null;
+    let currentStudentInfo = null;
     
     // Lecture data
     const lectures = [
@@ -786,11 +924,26 @@
 
     studentBtn.addEventListener('click', () => {
       dashboard.style.display = 'none';
-      studentTimetable.style.display = 'block';
-      generateStudentTimetable();
+      studentNameInput.style.display = 'block';
+      
+      // Load saved student info if exists
+      const savedName = localStorage.getItem('studentName');
+      const savedId = localStorage.getItem('studentId');
+      
+      if (savedName) {
+        studentNameField.value = savedName;
+      }
+      if (savedId) {
+        studentIdField.value = savedId;
+      }
     });
 
     // Back button handlers
+    backBtnStudentName.addEventListener('click', () => {
+      studentNameInput.style.display = 'none';
+      dashboard.style.display = 'block';
+    });
+
     backBtnProfessor.addEventListener('click', () => {
       professorTimetable.style.display = 'none';
       dashboard.style.display = 'block';
@@ -798,7 +951,7 @@
 
     backBtnStudentTimetable.addEventListener('click', () => {
       studentTimetable.style.display = 'none';
-      dashboard.style.display = 'block';
+      studentNameInput.style.display = 'block';
     });
 
     backBtnLecture.addEventListener('click', () => {
@@ -810,6 +963,37 @@
       stopCamera();
       studentLectureView.style.display = 'none';
       studentTimetable.style.display = 'block';
+    });
+
+    // Student info submission
+    submitStudentInfo.addEventListener('click', () => {
+      const name = studentNameField.value.trim();
+      const id = studentIdField.value.trim();
+      
+      if (!name) {
+        alert('Please enter your name');
+        return;
+      }
+      
+      // Save student info
+      currentStudentInfo = {
+        name: name,
+        id: id || `STU${Date.now().toString().slice(-6)}`
+      };
+      
+      localStorage.setItem('studentName', name);
+      localStorage.setItem('studentId', currentStudentInfo.id);
+      
+      // Update display
+      displayStudentName.textContent = name;
+      displayStudentId.textContent = currentStudentInfo.id;
+      currentStudentName.textContent = name;
+      currentStudentId.textContent = currentStudentInfo.id;
+      
+      // Show timetable
+      studentNameInput.style.display = 'none';
+      studentTimetable.style.display = 'block';
+      generateStudentTimetable();
     });
 
     // Generate Professor Timetable
@@ -997,14 +1181,14 @@
       // Simple QR data: just day and lecture code
       const qrData = `${currentLectureData.day}|${currentLectureData.code}`;
       
-      // Create QR code with larger size
+      // Create QR code with larger size - FIX FOR LAPTOP
       qrcode = new QRCode(qrcodeContainer, {
         text: qrData,
-        width: 280,
-        height: 280,
+        width: 250,
+        height: 250,
         colorDark: '#000000',
         colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.H
+        correctLevel: QRCode.CorrectLevel.Q
       });
     }
 
@@ -1015,8 +1199,24 @@
       updateAttendanceList();
     });
 
+    refreshListBtn.addEventListener('click', () => {
+      updateAttendanceList();
+    });
+
     function updateAttendanceList() {
       attendanceItems.innerHTML = '';
+      
+      // Reload session data
+      const sessionKey = `session_${currentLectureData.day}_${currentLectureData.code}`;
+      const savedSession = localStorage.getItem(sessionKey);
+      
+      if (!savedSession) {
+        attendanceItems.innerHTML = '<p style="text-align: center; color: #6c757d;">No attendance marked yet.</p>';
+        return;
+      }
+      
+      currentSession = JSON.parse(savedSession);
+      updateAttendanceCounter();
       
       if (currentSession.attendees.length === 0) {
         attendanceItems.innerHTML = '<p style="text-align: center; color: #6c757d;">No attendance marked yet.</p>';
@@ -1028,8 +1228,8 @@
         item.className = 'attendance-item';
         item.innerHTML = `
           <div>
-            <strong>Student ${index + 1}</strong>
-            <div style="font-size: 0.9rem; color: #6c757d;">ID: ${attendee.studentId || 'Anonymous'}</div>
+            <strong>${attendee.studentName || `Student ${index + 1}`}</strong>
+            <div style="font-size: 0.9rem; color: #6c757d;">ID: ${attendee.studentId || 'N/A'}</div>
           </div>
           <div>
             ${new Date(attendee.timestamp).toLocaleTimeString()}
@@ -1131,13 +1331,14 @@
                 const session = JSON.parse(savedSession);
                 
                 // Check if already scanned (by this student)
-                const studentId = localStorage.getItem('studentId') || `student_${Date.now()}`;
+                const studentId = currentStudentInfo.id;
                 const alreadyScanned = session.attendees.some(a => a.studentId === studentId);
                 
                 if (!alreadyScanned) {
-                  // Add to attendees
+                  // Add to attendees with student info
                   session.attendees.push({
                     studentId: studentId,
+                    studentName: currentStudentInfo.name,
                     timestamp: Date.now(),
                     lecture: { day, code: lectureCode, name: lecture.name, time: lecture.time }
                   });
@@ -1204,10 +1405,20 @@
       startCamera();
     });
 
-    // Initialize student ID
-    if (!localStorage.getItem('studentId')) {
-      const randomId = 'STU' + Math.floor(1000 + Math.random() * 9000);
-      localStorage.setItem('studentId', randomId);
+    // Initialize with saved student info if exists
+    const savedName = localStorage.getItem('studentName');
+    const savedId = localStorage.getItem('studentId');
+    
+    if (savedName) {
+      currentStudentInfo = {
+        name: savedName,
+        id: savedId || `STU${Date.now().toString().slice(-6)}`
+      };
+      
+      displayStudentName.textContent = savedName;
+      displayStudentId.textContent = currentStudentInfo.id;
+      currentStudentName.textContent = savedName;
+      currentStudentId.textContent = currentStudentInfo.id;
     }
 
     // Initialize
